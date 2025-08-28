@@ -1,0 +1,17 @@
+# Ignore Eclipse workspace files
+.metadata/
+.classpath
+.project
+.settings/
+
+# Ignore build outputs
+target/
+bin/
+
+# Ignore IntelliJ IDEA
+.idea/
+*.iml
+
+# Logs
+*.log
+
