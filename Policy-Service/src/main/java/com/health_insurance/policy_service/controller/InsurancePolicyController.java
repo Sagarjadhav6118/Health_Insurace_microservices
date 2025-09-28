@@ -16,17 +16,40 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.health_insurance.policy_service.entity.InsurancePolicy;
 import com.health_insurance.policy_service.service.InsurancePolicyService;
+import com.health_insurance.policy_service.service.PolicyEventProducer;
 
 @RestController
 @RequestMapping("/api/policies")
 public class InsurancePolicyController {
 	 @Autowired
 	    private InsurancePolicyService policyService;
+	 
+	 @Autowired
+	 PolicyEventProducer policyEventProducer;
+	 
+	 
+	 public InsurancePolicyController(PolicyEventProducer policyEventProducer) {
+	        this.policyEventProducer = policyEventProducer;
+	    }
+	 
+	 
+	 
+	 
 
 	    @PostMapping
 	    public ResponseEntity<InsurancePolicy> createPolicy(@RequestBody InsurancePolicy policy) {
+	      policyEventProducer.sendPolicyCreatedEvent("Policy created with ID: " + policy.getId());
+
 	        return new ResponseEntity<>(policyService.createPolicy(policy), HttpStatus.CREATED);
+	        
 	    }
+	    
+//	    @PostMapping("/{Id}")
+//	    public ResponseEntity<InsurancePolicy> createPolicyById(@RequestBody InsurancePolicy policy, @PathVariable Long id) {
+//	    	return new policyEventProducer.sendPolicyCreatedEvent("Policy created with ID: " + policy.getId());
+//
+//	        
+//	    }
 
 	    @GetMapping
 	    public ResponseEntity<List<InsurancePolicy>> getAllPolicies() {
